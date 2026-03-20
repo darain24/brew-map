@@ -4,7 +4,9 @@ import { notFound } from "next/navigation";
 import { CafeDetail } from "@/components/cafe/CafeDetail";
 
 async function getCafe(osmId: string) {
-  const base = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+  const base =
+    process.env.NEXT_PUBLIC_APP_URL ??
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
   const res = await fetch(`${base}/api/cafes/${encodeURIComponent(osmId)}`, {
     cache: "no-store",
   });
