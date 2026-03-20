@@ -2,17 +2,7 @@
 
 import { notFound } from "next/navigation";
 import { CafeDetail } from "@/components/cafe/CafeDetail";
-
-async function getCafe(osmId: string) {
-  const base =
-    process.env.NEXT_PUBLIC_APP_URL ??
-    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
-  const res = await fetch(`${base}/api/cafes/${encodeURIComponent(osmId)}`, {
-    cache: "no-store",
-  });
-  if (!res.ok) return null;
-  return res.json();
-}
+import { fetchCafeByOsmId } from "@/lib/overpass";
 
 export default async function CafePage({
   params,
@@ -20,7 +10,7 @@ export default async function CafePage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const cafe = await getCafe(id);
+  const cafe = await fetchCafeByOsmId(id);
   if (!cafe) notFound();
 
   return (
